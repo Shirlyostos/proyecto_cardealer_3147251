@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model lugares {
+  id Int @id @default(autoincrement())
+  lugar_nombre String @unique
+  usuarios usuarios[]
+}
+
+model usuarios {
+  id Int @id @default(autoincrement())
+ usuario_nombre String
+  usuario_email String 
+  usuario_password String
+  usuario_rol String
+  usuario_estado Boolean @default(true)
+  lugar_id Int
+  lugar lugares @relation(fields: [lugar_id], references:[id])
+
+}
+
+model brands {
+  id Int @id @default(autoincrement())
+  brand_name String @unique
+}
