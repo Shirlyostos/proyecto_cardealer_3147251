@@ -1,16 +1,25 @@
-import { Controller, Delete, Get, Patch, Post, Param} from '@nestjs/common';
+import { Controller, Delete, Get, Patch, Post, Param, Body} from '@nestjs/common';
+import { LugaresService } from './lugares.service'; 
+
+
 
 
 @Controller('lugares')
 export class LugaresController {
 
+  constructor(private service:LugaresService) {}
 //endpoint:
 //destino de la request
 //se escribe una función 
 //en una clase controlador 
   @Get()
-  consultarLugares(): string {
-  return "aqui se podra consultar todos los lugares";
+  consultarLugares() {
+    return  this.service.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(+id);
   }
 
   //desde la request se va
@@ -24,33 +33,29 @@ export class LugaresController {
  
 
 
-  @Post()
-  registrarLugares(): string {
-    //aqui se podra registrar un lugar
- return "aqui se podran registrar lugares";
-}
-@Post(':id')
-registrarLugaresPorId(@Param("id") id:string): string { 
-  return `aqui se va registrar lugares por id: ${ id }`;
+@Post()
+create(@Body() body: any){
+  return this.service.create(body);  
 }
 
-@Patch()
-  actualizarLugares(): string {
-    //aqui se podra actualizar un lugar
-    return "aqui se podran actualizar lugares";
-  }
+
+
   @Patch(':id')
-  actualizarLugaresPorId(@Param("id") id:string): string { 
-    return `aqui se va actualizar lugares por id: ${ id }`;
-  }
-@Delete()
-  eliminarLugares(): string {
-    //aqui se podra eliminar un lugar
-    return "aqui se podran eliminar lugares";
-  }
-@Delete(':id')
-  eliminarLugaresPorId(@Param("id") id:string): string {    
-    return `aqui se va eliminar lugares por id: ${ id }`;
+  update(@Param("id") id: string, @Body() body: any) { 
+    return {
+      "exito": true,
+      "mensaje": "Actualizado Correctamente",
+      "id": id,
+      "data": this.service.update(+id, body)
+    };
+
   }
 
+@Delete(':id')
+remove(@Param("id") id: string) {
+  return this.service.remove(+id);
+
 }
+  
+  
+  }

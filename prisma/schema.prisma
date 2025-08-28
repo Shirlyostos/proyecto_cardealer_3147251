@@ -14,25 +14,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model lugares {
-  id Int @id @default(autoincrement())
-  lugar_nombre String @unique
-  usuarios usuarios[]
+model Lugar {
+  id            Int       @id @default(autoincrement())
+  lugar_nombre  String    @unique
+  usuarios      Usuario[]
+  fecha       DateTime  @default(now())
+  estado      Boolean   @default(true)
+  
 }
 
-model usuarios {
-  id Int @id @default(autoincrement())
- usuario_nombre String
-  usuario_email String 
+model Usuario {
+  id              Int     @id @default(autoincrement())
+  usuario_nombre  String
+  usuario_email   String 
   usuario_password String
-  usuario_rol String
-  usuario_estado Boolean @default(true)
-  lugar_id Int
-  lugar lugares @relation(fields: [lugar_id], references:[id])
-
+  usuario_rol     String
+  usuario_estado  Boolean @default(true)
+  lugar_id        Int
+  lugar           Lugar   @relation(fields: [lugar_id], references:[id])
 }
 
-model brands {
-  id Int @id @default(autoincrement())
+model Brand {
+  id         Int    @id @default(autoincrement())
   brand_name String @unique
 }
